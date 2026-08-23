@@ -6,7 +6,7 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 export async function proxy(req) {
   const { pathname } = req.nextUrl;
 
-  if (pathname.startsWith("/login")) {
+  if (pathname.startsWith("/login") || pathname.startsWith("/api/auth")) {
     return NextResponse.next();
   }
 
