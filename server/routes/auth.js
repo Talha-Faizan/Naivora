@@ -29,7 +29,7 @@ router.post("/adminlogin", (req, res) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    return res.json({ message: "Admin login successful" });
+    return res.json({ message: "Admin login successful", token });
   }
 
   res.status(401).json({ message: "Invalid credentials" });

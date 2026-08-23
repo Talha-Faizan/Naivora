@@ -37,6 +37,15 @@ export const AdminAuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const res = await api.post("/auth/adminlogin", { email, password });
+      
+      if (res.data.token) {
+        await fetch("/api/auth/session", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: res.data.token }),
+        });
+      }
+
       await fetchAdmin();
       return res.data;
     } catch (err) {
@@ -47,6 +56,7 @@ export const AdminAuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await api.post("/auth/logout");
+      await fetch("/api/auth/session", { method: "DELETE" });
       setAdmin(null);
       setIsAdmin(false);
     } catch (err) {

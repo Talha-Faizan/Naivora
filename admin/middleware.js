@@ -10,7 +10,7 @@ export async function proxy(req) {
     return NextResponse.next();
   }
 
-  const token = req.cookies.get("admin_token")?.value;
+  const token = req.cookies.get("vercel_admin_token")?.value;
 
   if (!token) {
     return NextResponse.redirect(new URL("/login", req.url));
