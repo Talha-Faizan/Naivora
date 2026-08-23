@@ -8,13 +8,12 @@ export async function POST(request) {
     return NextResponse.json({ error: "Token is required" }, { status: 400 });
   }
 
-  // Set the cookie for the Vercel domain
-  // We use the same secure settings as the backend
-  cookies().set("vercel_admin_token", token, {
+  const cookieStore = await cookies();
+  cookieStore.set("vercel_admin_token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax", // Lax is fine here because the Vercel middleware is reading it from its own domain
-    maxAge: 24 * 60 * 60, // 1 day in seconds
+    sameSite: "lax", 
+    maxAge: 24 * 60 * 60, 
     path: "/",
   });
 
@@ -22,6 +21,7 @@ export async function POST(request) {
 }
 
 export async function DELETE() {
-  cookies().delete("vercel_admin_token");
+  const cookieStore = await cookies();
+  cookieStore.delete("vercel_admin_token");
   return NextResponse.json({ success: true });
 }
