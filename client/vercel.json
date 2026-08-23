@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://naivora.onrender.com/api/$1"
+    }
+  ]
+}
