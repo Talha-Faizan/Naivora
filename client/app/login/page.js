@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../lib/firebase";
@@ -7,7 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import api from "../../lib/api";
 import { motion } from "motion/react";
 
-export default function LoginPage() {
+function LoginContent() {
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
   const [otp, setOtp] = useState("");
@@ -190,5 +190,17 @@ export default function LoginPage() {
         )}
       </motion.div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen pt-32 flex items-center justify-center bg-[#fbf1e7]">
+        <div className="w-8 h-8 border-2 border-[#b08d57] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }
