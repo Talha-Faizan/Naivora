@@ -4,11 +4,11 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import api from "../../lib/api";
-import { LayoutDashboard, Package, ShoppingBag, LogOut, Plus, Edit, Trash2, Power, Search } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Image as ImageIcon, LogOut, Plus, Edit, Trash2, Power, Search } from "lucide-react";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 
 const categories = [
-  "suits", "t-shirts", "sweat-shirts", "hoodies", "sneakers", "new-arrivals", "specials", "comics"
+  "ladies", "suits", "t-shirts", "sweat-shirts", "hoodies", "sneakers", "new-arrivals", "specials", "comics"
 ];
 
 export default function ProductsPage() {
@@ -82,6 +82,9 @@ export default function ProductsPage() {
           </Link>
           <Link href="/orders" className="flex items-center gap-3 px-4 py-3 text-[#fbf1e7]/70 hover:text-[#b08d57] hover:bg-white/5 rounded-xl transition-colors text-sm uppercase tracking-widest">
             <ShoppingBag size={18} /> Orders
+          </Link>
+          <Link href="/posters" className="flex items-center gap-3 px-4 py-3 text-[#fbf1e7]/70 hover:text-[#b08d57] hover:bg-white/5 rounded-xl transition-colors text-sm uppercase tracking-widest">
+            <ImageIcon size={18} /> Posters
           </Link>
         </nav>
 

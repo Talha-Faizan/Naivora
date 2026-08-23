@@ -41,6 +41,7 @@ app.use("/api", require("./routes/order"));
 app.use("/api/address", require("./routes/address"));
 app.use("/api/products/admin", require("./routes/adminproducts"));
 app.use("/api/user", require("./routes/user"));
+app.use("/api/posters", require("./routes/posters"));
 
 // Health check route for Render cron jobs to keep server alive
 app.get("/api/health", (req, res) => {

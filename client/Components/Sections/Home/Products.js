@@ -31,6 +31,7 @@ const formatPrice = (price) => {
 
 const CATEGORIES = [
   "All",
+  "Ladies",
   "Suits",
   "T-Shirts",
   "Sweat Shirts",
@@ -107,6 +108,7 @@ const Products = () => {
   // Category mapping to match database enum values
   const CATEGORY_MAP = {
     All: null,
+    Ladies: "ladies",
     Suits: "suits",
     "T-Shirts": "t-shirts",
     "Sweat Shirts": "sweat-shirts",

@@ -8,7 +8,7 @@ import { uploadToImageKit } from "../../../lib/imagekit";
 import { ArrowLeft, Upload, Loader2, X } from "lucide-react";
 
 const categories = [
-  "suits", "t-shirts", "sweat-shirts", "hoodies", "sneakers", "new-arrivals", "specials", "comics"
+  "ladies", "suits", "t-shirts", "sweat-shirts", "hoodies", "sneakers", "new-arrivals", "specials", "comics"
 ];
 
 function ProductForm() {

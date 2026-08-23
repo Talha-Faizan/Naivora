@@ -35,7 +35,7 @@ const productSchema = new mongoose.Schema(
     },
     mainCategory: {
       type: String,
-      enum: ["suits", "t-shirts", "sweat-shirts", "hoodies", "sneakers", "new-arrivals", "specials", "comics"],
+      enum: ["ladies", "suits", "t-shirts", "sweat-shirts", "hoodies", "sneakers", "new-arrivals", "specials", "comics"],
       required: true,
     },
     subCategory: {

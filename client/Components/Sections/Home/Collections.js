@@ -4,22 +4,43 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-const posters = [
-  { src: '/posters/cta.jpeg', title: 'New Arrivals' },
-  { src: '/posters/hoodies.jpeg', title: 'Hoodies' },
-  { src: '/posters/sneakers.jpeg', title: 'Sneakers' },
-  { src: '/posters/suits.jpeg', title: 'Suits' },
-  { src: '/posters/sweatshirts.jpeg', title: 'Sweatshirts' },
-  { src: '/posters/t-shirts.jpeg', title: 'T-Shirts' },
-];
+import api from '../../../lib/api';
+import { Loader2 } from 'lucide-react';
 
 const Collections = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [direction, setDirection] = useState(1); // 1 for right, -1 for left
 
+  const [posters, setPosters] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    if (isHovered) return;
+    const fetchPosters = async () => {
+      try {
+        const res = await api.get('/posters/all');
+        if (res.data && res.data.length > 0) {
+          setPosters(res.data);
+        } else {
+          // Fallback if no posters
+          setPosters([
+            { image: { url: '/posters/cta.jpeg' }, title: 'New Arrivals' }
+          ]);
+        }
+      } catch (err) {
+        console.error("Failed to load posters", err);
+        setPosters([
+          { image: { url: '/posters/cta.jpeg' }, title: 'New Arrivals' }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosters();
+  }, []);
+
+  useEffect(() => {
+    if (isHovered || posters.length <= 1) return;
     
     const interval = setInterval(() => {
       setDirection(1);
@@ -27,7 +48,7 @@ const Collections = () => {
     }, 3500);
     
     return () => clearInterval(interval);
-  }, [isHovered]);
+  }, [isHovered, posters.length]);
 
   const handleNext = () => {
     setDirection(1);
@@ -81,31 +102,35 @@ const Collections = () => {
         whileInView={{ y: 0, opacity: 1 }}
         viewport={{ once: true, margin: "-20%" }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        className="relative w-[90vw] md:w-[75vw] h-[600px] md:h-[800px] overflow-hidden shadow-2xl group rounded-2xl"
+        className="relative w-[90vw] md:w-[75vw] h-[600px] md:h-[800px] overflow-hidden shadow-2xl group rounded-2xl bg-[#2b2320]/5"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <AnimatePresence initial={false} custom={direction} mode="popLayout">
-          <motion.div
-            key={currentIndex}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            // ponytail: tween (CSS engine) instead of spring (JS loop) — same
-            // feel but the browser handles interpolation off the main thread
-            transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-            style={{ willChange: "transform" }}
-            className="absolute inset-0 w-full h-full"
-          >
-            <img
-              src={posters[currentIndex].src}
-              alt={posters[currentIndex].title}
-              className="w-full h-full object-cover rounded-2xl pointer-events-none"
-            />
-          </motion.div>
-        </AnimatePresence>
+        {loading ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <Loader2 className="w-10 h-10 animate-spin text-[#B08D57]" />
+          </div>
+        ) : posters.length > 0 && (
+          <AnimatePresence initial={false} custom={direction} mode="popLayout">
+            <motion.div
+              key={currentIndex}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+              style={{ willChange: "transform" }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <img
+                src={posters[currentIndex]?.image?.url || posters[currentIndex]?.src}
+                alt={posters[currentIndex]?.title}
+                className="w-full h-full object-cover rounded-2xl pointer-events-none"
+              />
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         {/* Navigation Controls */}
         <div className="absolute inset-0 flex items-center justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

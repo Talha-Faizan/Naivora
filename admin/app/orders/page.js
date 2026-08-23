@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import api from "../../lib/api";
-import { LayoutDashboard, Package, ShoppingBag, LogOut, Eye, Trash2, CheckCircle2, Search } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Image as ImageIcon, LogOut, Eye, Trash2, CheckCircle2, Search } from "lucide-react";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 
 export default function OrdersPage() {
@@ -104,6 +104,9 @@ export default function OrdersPage() {
           </Link>
           <Link href="/orders" className="flex items-center gap-3 px-4 py-3 bg-[#b08d57]/20 text-[#b08d57] rounded-xl text-sm uppercase tracking-widest">
             <ShoppingBag size={18} /> Orders
+          </Link>
+          <Link href="/posters" className="flex items-center gap-3 px-4 py-3 text-[#fbf1e7]/70 hover:text-[#b08d57] hover:bg-white/5 rounded-xl transition-colors text-sm uppercase tracking-widest">
+            <ImageIcon size={18} /> Posters
           </Link>
         </nav>
 
