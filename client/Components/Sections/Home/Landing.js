@@ -8,7 +8,7 @@ const Landing = () => {
       <MarqueeHero />
       <div className="absolute bottom-5 z-10 w-full p-5">
         <div className="flex items-start justify-between">
-          <div className="w-full md:w-[60%] lg:w-[35%] pr-24 md:pr-0 flex flex-col gap-5">
+          <div className="w-full max-md:hidden md:w-[60%] lg:w-[35%] pr-24 md:pr-0 flex flex-col gap-5">
             <p className="para">
               Where street culture meets everyday elegance. Naivora brings you
               pieces that don't just follow trends — they define your own. Bold
@@ -21,7 +21,7 @@ const Landing = () => {
               </button>
             </div>
           </div>
-          <div className="fixed right-5 bottom-10">
+          <div className="fixed right-5 bottom-10 max-md:left-1/2 max-md:-translate-x-1/2 max-md:right-auto">
             <CircularText
               text="SCROLL ♦ SCROLL ♦ SCROLL ♦ SCROLL ♦ "
               onHover="slowDown"

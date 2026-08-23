@@ -1,15 +1,9 @@
 "use client"
 
-import React, { useRef } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Truck, ShieldCheck, BadgeCheck, Headset } from 'lucide-react';
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, useGSAP);
-}
+import { motion } from 'motion/react';
 
 const InstagramIcon = ({ size = 20, strokeWidth = 1.5 }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
@@ -32,8 +26,6 @@ const FacebookIcon = ({ size = 20, strokeWidth = 1.5 }) => (
 );
 
 const Footer = () => {
-  const footerRef = useRef(null);
-
   const features = [
     { icon: <Truck size={22} className="text-[#B08D57]" strokeWidth={1.5} />, title: "FAST & SECURE", subtitle: "DELIVERY" },
     { icon: <ShieldCheck size={22} className="text-[#B08D57]" strokeWidth={1.5} />, title: "100% SECURE", subtitle: "PAYMENT" },
@@ -41,79 +33,60 @@ const Footer = () => {
     { icon: <Headset size={22} className="text-[#B08D57]" strokeWidth={1.5} />, title: "24X7 CUSTOMER", subtitle: "SUPPORT" }
   ];
 
-  useGSAP(() => {
-    const mm = gsap.matchMedia();
-
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      // Features animation
-      const featuresArr = gsap.utils.toArray(".footer-feature");
-      if (featuresArr.length > 0) {
-        gsap.fromTo(featuresArr,
-          { y: 30, opacity: 0 },
-          {
-            scrollTrigger: {
-              trigger: footerRef.current,
-              start: "top 90%",
-            },
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: "power3.out"
-          }
-        );
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
       }
+    }
+  };
 
-      // Columns animation
-      const colsArr = gsap.utils.toArray(".footer-col");
-      if (colsArr.length > 0) {
-        gsap.fromTo(colsArr,
-          { y: 40, opacity: 0 },
-          {
-            scrollTrigger: {
-              trigger: ".footer-cols-container",
-              start: "top 85%",
-            },
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power3.out"
-          }
-        );
+  const itemVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
+
+  const colContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
       }
+    }
+  };
 
-      // Bottom section animation
-      const bottomSec = document.querySelector(".footer-bottom");
-      if (bottomSec) {
-        gsap.fromTo(bottomSec,
-          { opacity: 0 },
-          {
-            scrollTrigger: {
-              trigger: bottomSec,
-              start: "top 95%",
-            },
-            opacity: 1,
-            duration: 1.5,
-            ease: "power2.out"
-          }
-        );
-      }
-    });
-
-    return () => mm.revert();
-  }, { scope: footerRef });
+  const colVariants = {
+    hidden: { y: 40, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
 
   return (
-    <footer ref={footerRef} className="w-full bg-[#050505] pt-16 pb-12 relative overflow-hidden mt-auto font-sans">
+    <footer className="w-full bg-[#050505] pt-16 pb-12 relative overflow-hidden mt-auto font-sans">
       
       <div className="max-w-screen-2xl mx-auto px-6 md:px-12 relative z-10">
         
         {/* TOP FEATURE ICONS SECTION */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-4 mb-16 px-4">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-10%" }}
+          className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-4 mb-16 px-4"
+        >
           {features.map((feature, index) => (
             <React.Fragment key={index}>
-              <div className="footer-feature flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
+              <motion.div variants={itemVariants} className="footer-feature flex items-center gap-4 w-[220px] md:w-auto justify-start mx-auto md:mx-0">
                 <div className="w-12 h-12 rounded-full border border-[rgba(176,141,87,0.3)] flex items-center justify-center flex-shrink-0">
                   {feature.icon}
                 </div>
@@ -121,22 +94,28 @@ const Footer = () => {
                   <span className="text-[rgba(255,255,255,0.85)] text-[11px] sm:text-xs font-semibold tracking-[0.15em] leading-tight whitespace-nowrap uppercase">{feature.title}</span>
                   <span className="text-[rgba(255,255,255,0.65)] text-[11px] sm:text-xs font-medium tracking-[0.15em] leading-tight whitespace-nowrap uppercase mt-0.5">{feature.subtitle}</span>
                 </div>
-              </div>
+              </motion.div>
               {/* Divider Line */}
               {index < features.length - 1 && (
                 <div className="hidden md:block w-[1px] h-12 bg-gradient-to-b from-transparent via-[rgba(255,255,255,0.08)] to-transparent" />
               )}
             </React.Fragment>
           ))}
-        </div>
+        </motion.div>
 
         {/* Horizontal Gradient Divider */}
         <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[rgba(176,141,87,0.3)] to-transparent mb-20" />
 
-        <div className="footer-cols-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-10 mb-24">
+        <motion.div 
+          variants={colContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-15%" }}
+          className="footer-cols-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-10 mb-24"
+        >
           
           {/* Brand Info */}
-          <div className="footer-col flex flex-col col-span-1 lg:col-span-1 pr-4">
+          <motion.div variants={colVariants} className="footer-col flex flex-col col-span-1 lg:col-span-1 md:pr-4 items-center md:items-start text-center md:text-left">
             <h2 
               className="text-[#B08D57] text-[28px] tracking-[0.05em] mb-6"
               style={{ fontFamily: "'Playfair Display', serif" }}
@@ -147,7 +126,7 @@ const Footer = () => {
               Elevating everyday luxury. Premium quality materials crafted for those who demand excellence in every detail.
             </p>
             {/* SOCIAL MEDIA ICONS */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center md:justify-start gap-4 w-full">
               {[InstagramIcon, TwitterIcon, FacebookIcon].map((Icon, idx) => (
                 <a 
                   key={idx}
@@ -158,13 +137,13 @@ const Footer = () => {
                 </a>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Quick Links */}
-          <div className="footer-col flex flex-col">
+          <motion.div variants={colVariants} className="footer-col flex flex-col items-center md:items-start text-center md:text-left">
             {/* VISUAL HIERARCHY FOR COLUMN HEADINGS */}
             <h3 className="text-[#B08D57] text-[13px] font-bold tracking-[0.15em] mb-[20px] uppercase">Explore</h3>
-            <ul className="flex flex-col gap-4">
+            <ul className="flex flex-col gap-4 items-center md:items-start">
               {['New Arrivals', 'Best Sellers', 'Collections', 'Accessories'].map((link) => (
                 <li key={link}>
                   {/* LINK HOVER STATES */}
@@ -177,12 +156,12 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Support */}
-          <div className="footer-col flex flex-col">
+          <motion.div variants={colVariants} className="footer-col flex flex-col items-center md:items-start text-center md:text-left">
             <h3 className="text-[#B08D57] text-[13px] font-bold tracking-[0.15em] mb-[20px] uppercase">Support</h3>
-            <ul className="flex flex-col gap-4">
+            <ul className="flex flex-col gap-4 items-center md:items-start">
               {['FAQ', 'Shipping & Returns', 'Size Guide', 'Contact Us'].map((link) => (
                 <li key={link}>
                   <Link 
@@ -194,14 +173,14 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* Newsletter */}
-          <div className="footer-col flex flex-col">
+          <motion.div variants={colVariants} className="footer-col flex flex-col items-center md:items-start text-center md:text-left">
             <h3 className="text-[#B08D57] text-[13px] font-bold tracking-[0.15em] mb-[20px] uppercase">Newsletter</h3>
-            <p className="text-[rgba(255,255,255,0.65)] text-sm mb-6 font-light">Subscribe to receive updates, access to exclusive deals, and more.</p>
+            <p className="text-[rgba(255,255,255,0.65)] text-sm mb-6 font-light max-w-[280px] md:max-w-none">Subscribe to receive updates, access to exclusive deals, and more.</p>
             {/* NEWSLETTER INPUT REDESIGN */}
-            <div className="relative flex items-center w-full max-w-sm">
+            <div className="relative flex items-center w-full max-w-sm justify-center md:justify-start">
               <input 
                 type="email" 
                 placeholder="Enter your email address" 
@@ -211,11 +190,17 @@ const Footer = () => {
                 <ArrowRight size={16} strokeWidth={2} className="text-white" />
               </button>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Bottom Section */}
-        <div className="footer-bottom flex flex-col items-center justify-center pt-10 relative mt-16">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="footer-bottom flex flex-col items-center justify-center pt-10 relative mt-16"
+        >
           {/* Top Divider for Bottom Section */}
           <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[rgba(176,141,87,0.3)] to-transparent" />
           
@@ -238,7 +223,7 @@ const Footer = () => {
               <Link href="#" className="hover:text-[#E8B4B8] transition-colors duration-200">Terms of Service</Link>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

@@ -1,67 +1,40 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import MarqueeText from "../Animations/MarqueeText";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, useGSAP);
-}
+import { motion } from "motion/react";
 
 const MarqueeHero = () => {
-  const containerRef = useRef(null);
-  const textRefs = useRef([]);
-  const imageWrapperRef = useRef(null);
-  const imageRef = useRef(null);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.2,
+        staggerChildren: 0.15,
+      }
+    }
+  };
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-
-      // Only animate if the user hasn't requested reduced motion
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const tl = gsap.timeline();
-
-        // Text reveal (staggered curtain rise)
-        tl.from(
-          textRefs.current,
-          {
-            y: 60,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.15,
-            ease: "power4.out",
-            delay: 0.2, // Let the navbar drop in first
-          },
-          0,
-        );
-
-        // // Image mask-reveal (curtain lift) + scale
-        // tl.fromTo(imageWrapperRef.current,
-        //   { clipPath: "inset(100% 0 0 0)" },
-        //   { clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power3.inOut" },
-        //   0.4
-        // );
-
-        // tl.fromTo(imageRef.current,
-        //   { scale: 1.15 },
-        //   { scale: 1, duration: 1.2, ease: "power3.inOut" },
-        //   0.4
-        // );
-      });
-
-      return () => mm.revert();
-    },
-    { scope: containerRef },
-  );
+  const itemVariants = {
+    hidden: { y: 60, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { duration: 1, ease: [0.25, 1, 0.5, 1] } // equivalent to power4.out
+    }
+  };
 
   return (
-    <div ref={containerRef} className="w-full h-screen relative">
-      <div className="py-12 flex flex-col items-center justify-center gap-10 h-full relative z-10">
-        <div
-          ref={(el) => (textRefs.current[0] = el)}
+    <div className="w-full h-screen relative">
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="py-12 flex flex-col items-center justify-center gap-10 h-full relative z-10"
+      >
+        <motion.div
+          variants={itemVariants}
           className="w-full overflow-hidden"
           style={{ willChange: "transform" }}
         >
@@ -76,9 +49,9 @@ const MarqueeHero = () => {
               <span className="italic text-[#5C1A2E]">feels like you.</span>
             </div>
           </MarqueeText>
-        </div>
-        <div
-          ref={(el) => (textRefs.current[1] = el)}
+        </motion.div>
+        <motion.div
+          variants={itemVariants}
           className="w-full overflow-hidden"
           style={{ willChange: "transform" }}
         >
@@ -95,10 +68,10 @@ const MarqueeHero = () => {
               </span>
             </div>
           </MarqueeText>
-        </div>
+        </motion.div>
 
-        <div
-          ref={(el) => (textRefs.current[2] = el)}
+        <motion.div
+          variants={itemVariants}
           className="w-full overflow-hidden"
           style={{ willChange: "transform" }}
         >
@@ -113,8 +86,8 @@ const MarqueeHero = () => {
               <span className="font-bold">a lifestyle.</span>
             </div>
           </MarqueeText>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
         <div ref={imageWrapperRef} className="h-screen w-screen overflow-hidden">

@@ -1,16 +1,8 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, useGSAP);
-}
 
 const posters = [
   { src: '/posters/cta.jpeg', title: 'New Arrivals' },
@@ -25,39 +17,6 @@ const Collections = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [direction, setDirection] = useState(1); // 1 for right, -1 for left
-  const containerRef = useRef(null);
-  const textRef = useRef(null);
-  const sliderRef = useRef(null);
-
-  useGSAP(() => {
-    const mm = gsap.matchMedia();
-
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.from(textRef.current, {
-        scrollTrigger: {
-          trigger: textRef.current,
-          start: "top 85%",
-        },
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out"
-      });
-
-      gsap.from(sliderRef.current, {
-        scrollTrigger: {
-          trigger: sliderRef.current,
-          start: "top 80%",
-        },
-        y: 80,
-        opacity: 0,
-        duration: 1.2,
-        ease: "power3.out"
-      });
-    });
-
-    return () => mm.revert();
-  }, { scope: containerRef });
 
   useEffect(() => {
     if (isHovered) return;
@@ -101,18 +60,27 @@ const Collections = () => {
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen w-full py-20 overflow-hidden flex flex-col justify-center items-center">
-      <div ref={textRef} className="px-5 mb-10 md:mb-12 text-center">
+    <div className="min-h-screen w-full py-20 overflow-hidden flex flex-col justify-center items-center">
+      <motion.div 
+        initial={{ y: 50, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true, margin: "-15%" }}
+        transition={{ duration: 1, ease: "easeOut" }}
+        className="px-5 mb-10 md:mb-12 text-center"
+      >
         <h1 className="head text-5xl md:text-7xl font-bold text-[#5C1A2E]">
           Explore <span className="text-[#B08D57]">Collections</span>
         </h1>
         <p className="para mt-4 text-[#2B2320] text-lg max-w-xl mx-auto">
           Discover our latest pieces, carefully curated to elevate your everyday style.
         </p>
-      </div>
+      </motion.div>
 
-      <div 
-        ref={sliderRef}
+      <motion.div 
+        initial={{ y: 80, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true, margin: "-20%" }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
         className="relative w-[90vw] md:w-[75vw] h-[600px] md:h-[800px] overflow-hidden shadow-2xl group rounded-2xl"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -131,13 +99,10 @@ const Collections = () => {
             style={{ willChange: "transform" }}
             className="absolute inset-0 w-full h-full"
           >
-            <Image
+            <img
               src={posters[currentIndex].src}
               alt={posters[currentIndex].title}
-              fill
-              sizes="(max-width: 768px) 90vw, 75vw"
-              priority={currentIndex === 0}
-              className="object-cover rounded-2xl pointer-events-none"
+              className="w-full h-full object-cover rounded-2xl pointer-events-none"
             />
           </motion.div>
         </AnimatePresence>
@@ -157,7 +122,7 @@ const Collections = () => {
             <ChevronRight size={28} />
           </button>
         </div>
-      </div>
+      </motion.div>
       
       {/* Dots Indicator */}
       <div className="flex gap-3 mt-8">

@@ -4,34 +4,12 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingCart, User, Heart, Menu, X, LogIn } from "lucide-react";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
+import { motion } from "motion/react";
 import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
   const { user, loading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const navRef = useRef(null);
-
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // Animate navbar drop-in on load
-        gsap.from(navRef.current, {
-          y: -100,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out",
-          delay: 0.1,
-        });
-      });
-
-      return () => mm.revert();
-    },
-    { scope: navRef },
-  );
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -41,8 +19,10 @@ const Navbar = () => {
   ];
 
   return (
-    <div
-      ref={navRef}
+    <motion.div
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
       className="h-20 w-full fixed top-0 left-0 z-[999999] px-4 md:px-5"
     >
       <div className="h-full w-full flex items-center justify-between">
@@ -151,7 +131,7 @@ const Navbar = () => {
           </ul>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

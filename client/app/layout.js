@@ -19,6 +19,7 @@ export const metadata = {
 import ConditionalLayout from "@/Components/Common/ConditionalLayout";
 import { AuthProvider } from "../context/AuthContext";
 import { CartProvider } from "../context/CartContext";
+import LenisProvider from "@/Components/Common/LenisProvider";
 
 export default function RootLayout({ children }) {
   return (
@@ -27,13 +28,15 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
     >
       <body className="flex flex-col overflow-x-hidden" suppressHydrationWarning>
-        <AuthProvider>
-          <CartProvider>
-            <ConditionalLayout>
-              {children}
-            </ConditionalLayout>
-          </CartProvider>
-        </AuthProvider>
+        <LenisProvider>
+          <AuthProvider>
+            <CartProvider>
+              <ConditionalLayout>
+                {children}
+              </ConditionalLayout>
+            </CartProvider>
+          </AuthProvider>
+        </LenisProvider>
       </body>
     </html>
   );
