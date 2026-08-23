@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "motion/react";
 import { ArrowLeft, Bookmark } from "lucide-react";
+import Image from "next/image";
 import api from "../../../lib/api";
 
 import { useCart } from "../../../context/CartContext";
@@ -133,12 +134,15 @@ export default function ProductDetail() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: idx * 0.1, ease: "easeOut" }}
                 key={idx} 
-                className="w-full bg-[#fbf1e7]"
+                className="w-full relative aspect-[3/4] bg-[#fbf1e7]"
               >
-                <img 
+                <Image 
                   src={img.url} 
                   alt={`${product.name} - view ${idx + 1}`}
-                  className="w-full h-auto object-cover"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 65vw"
+                  priority={idx === 0}
+                  className="object-cover"
                 />
               </motion.div>
             ))}

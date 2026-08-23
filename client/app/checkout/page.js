@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
 import { motion } from "motion/react";
+import Image from "next/image";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../lib/api";
@@ -285,7 +286,7 @@ export default function CheckoutPage() {
                   <div key={idx} className="flex justify-between items-center text-sm text-[#2b2320]">
                     <div className="flex items-center gap-4">
                       <div className="relative w-12 h-16 rounded overflow-hidden">
-                        <img src={product.images?.[0]?.url || "/placeholder.jpg"} alt={product.name} className="w-full h-full object-cover" />
+                        <Image src={product.images?.[0]?.url || "/placeholder.jpg"} alt={product.name} fill sizes="48px" className="object-cover" />
                         <span className="absolute -top-1 -right-1 bg-[#b08d57] text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full z-10">{qty}</span>
                       </div>
                       <div>

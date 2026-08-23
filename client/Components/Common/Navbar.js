@@ -2,6 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingCart, User, Heart, Menu, X, LogIn } from "lucide-react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -47,11 +48,14 @@ const Navbar = () => {
       <div className="h-full w-full flex items-center justify-between">
         {/* Logo */}
         <div className="h-14 md:h-16 p-2 pr-5 flex items-center gap-10 backdrop-blur-xl rounded-2xl shadow-xl border border-black/5">
-          <Link href="/" className="h-full w-full">
-            <img
-              className="h-full w-full object-contain"
+          <Link href="/" className="relative h-full aspect-[3/1] flex-shrink-0">
+            <Image
+              fill
+              sizes="(max-width: 768px) 150px, 200px"
+              className="object-contain"
               src="/logo.png"
               alt="Naivora"
+              priority
             />
           </Link>
 

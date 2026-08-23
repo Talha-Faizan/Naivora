@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -130,10 +131,13 @@ const Collections = () => {
             style={{ willChange: "transform" }}
             className="absolute inset-0 w-full h-full"
           >
-            <img
+            <Image
               src={posters[currentIndex].src}
               alt={posters[currentIndex].title}
-              className="w-full h-full object-cover rounded-2xl  pointer-events-none"
+              fill
+              sizes="(max-width: 768px) 90vw, 75vw"
+              priority={currentIndex === 0}
+              className="object-cover rounded-2xl pointer-events-none"
             />
           </motion.div>
         </AnimatePresence>

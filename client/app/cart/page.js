@@ -3,6 +3,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingBag, X, Plus, Minus } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../context/CartContext';
 
@@ -80,7 +81,9 @@ const CartPage = () => {
                         className="flex flex-col md:grid md:grid-cols-6 gap-4 items-center border-b border-[#2b2320]/10 pb-8 relative group"
                       >
                         <div className="col-span-3 flex gap-6 w-full">
-                          <img src={imageUrl} alt={product.name} className="w-24 h-32 object-cover rounded-xl" />
+                          <div className="relative w-24 h-32 flex-shrink-0">
+                            <Image src={imageUrl} alt={product.name} fill sizes="96px" className="object-cover rounded-xl" />
+                          </div>
                           <div className="flex flex-col justify-center">
                             <h3 className="text-lg font-medium text-[#2b2320] mb-2">{product.name}</h3>
                             <p className="text-sm text-[#2b2320]/70">{formatPrice(product.price)}</p>

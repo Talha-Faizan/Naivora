@@ -4,6 +4,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import LineSidebar from "../../Animations/LineSidebar";
 import { motion } from "motion/react";
+import Image from "next/image";
 import api from "../../../lib/api";
 
 const getDefaultImage = (item) => {
@@ -292,14 +293,15 @@ const Products = () => {
                   >
                     {/* Image */}
                     <div className="relative h-64 overflow-hidden">
-                      <img
-                        loading="lazy"
-                        decoding="async"
+                      <Image
                         src={getDefaultImage(item)}
                         alt={item.name}
-                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-contain transition-transform duration-300 group-hover:scale-105"
                         onError={(e) => {
                           e.target.src = "/placeholder.jpg";
+                          e.target.srcset = "";
                         }}
                       />
                       {/* Hover overlay */}
